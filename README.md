@@ -7,7 +7,8 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-A simple back-end life circle for fields, inspired on [cockpit](http://getcockpit.com/) via command line you can create fields for your partials
+A simple back-end life circle for fields inspired on [cockpit](http://getcockpit.com/).
+Via command line you can create fields for your partials and consume in your project using he Repository, Services or Extensions
 
 ## Install
 
