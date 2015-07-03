@@ -1,0 +1,8 @@
+#!/usr/bin/env php
+<?php
+
+require 'vendor/autoload.php';
+
+use WilliamEspindola\Field\Console\Field;
+
+return (new Field())->run();
