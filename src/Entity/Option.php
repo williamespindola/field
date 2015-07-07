@@ -2,7 +2,7 @@
 
 namespace WilliamEspindola\Field\Entity;
 
-class Options
+class Option implements EntityInterface
 {
     /**
      * @var integer
