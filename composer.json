@@ -18,7 +18,7 @@
   ],
   "require": {
     "php" : ">=5.4",
-    "respect/relational": "0.6.x",
+    "respect/relational": "^0.8",
     "ocramius/generated-hydrator": "1.1.0",
     "symfony/console": "~2.7"
   },

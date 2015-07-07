@@ -2,16 +2,15 @@
 
 namespace WilliamEspindola\Field\Console\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
-use Respect\Relational\Mapper;
+use WilliamEspindola\Field\Entity\Field;
+use WilliamEspindola\Field\Repository\FieldRepository;
+use WilliamEspindola\Field\Storage\ORM\RespectRelational;
 
-class Create extends Command
+class Create extends AbstractCommand
 {
-    protected $mapper;
-
     protected function configure()
     {
         $this->setName('create')
@@ -28,20 +27,17 @@ class Create extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $cwd = getcwd() . DIRECTORY_SEPARATOR . 'field.ini';
+        $this->bootstrap($input, $output);
 
-        $parse = parse_ini_file($cwd);
+        $mapper     = $this->getMapper();
+        $relational = new RespectRelational($mapper);
+        $repository = new FieldRepository($relational);
+        $field      = new Field();
 
-        $this->mapper = new Mapper(new \PDO($parse['db_dsn'], $parse['db_user'], $parse['db_pass']));
+        $field->setName($input->getArgument('name'));
+        $field->setType($input->getArgument('type'));
+        $field->setLabel($input->getArgument('label'));
 
-        $field = (object)([
-            'id' => null,
-            'name' => $input->getArgument('name'),
-            'type' => $input->getArgument('name'),
-            'label' => $input->getArgument('name')
-        ]);
-
-        $this->mapper->field->persist($field);
-        $this->mapper->flush();
+        $repository->save($field);
     }
-} 
+}
