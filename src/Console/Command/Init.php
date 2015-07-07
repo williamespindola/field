@@ -34,7 +34,7 @@ class Init extends Command
             ));
         }
 
-        $fileName = 'field.ini';
+        $fileName = 'field.config.php';
         $filePath = $path . DIRECTORY_SEPARATOR . $fileName;
 
         if (file_exists($filePath)) {
@@ -45,12 +45,15 @@ class Init extends Command
         }
 
         $contents = <<< EOT
-db_driver = "mysql"
-db_host   = "localhost"
-db_name   = "my_database"
-db_user   = "my_user"
-db_pass   = "my_pass"
-db_dsn    = "[db_driver]:host=[db_host];dbname=[db_name]"
+<?php
+
+return [
+    'driver' => 'mysql'
+    'host'   => 'localhost'
+    'dbname'   => 'my_database'
+    'user'   => 'my_user'
+    'password'   => 'my_pass'
+];
 EOT;
 
         if (false === file_put_contents($filePath, $contents)) {
