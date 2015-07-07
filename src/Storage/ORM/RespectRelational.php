@@ -22,9 +22,6 @@ class RespectRelational implements StorageORMInterface
      */
     protected $mapper;
 
-    protected $namespace = '\\';
-
-
     public function __construct(Mapper $mapper)
     {
         $this->setMapper($mapper);
@@ -36,16 +33,17 @@ class RespectRelational implements StorageORMInterface
      */
     public function setEntityNamespace($namespace)
     {
-        $this->namespace = $namespace;
+        $this->mapper->entityNamespace = $namespace;
     }
 
     /**
      * @param string $tableName
      * @param object $data
+     * @return boolean
      */
     public function persist($tableName, $data)
     {
-        $this->getMapper()->$tableName->persist($data);
+        return $this->getMapper()->$tableName->persist($data);
     }
 
     /**
@@ -69,9 +67,10 @@ class RespectRelational implements StorageORMInterface
     /**
      * @param $tableName
      * @param array $criteria for optimizing your clauses
+     * * @param Query optimization
      * @return void
      */
-    public function findBy($tableName, array $criteria, Sql $optimization)
+    public function findBy($tableName, array $criteria, $optimization)
     {
         return $this->getMapper()->$tableName($criteria)->fetchAll($optimization);
     }
@@ -91,8 +90,6 @@ class RespectRelational implements StorageORMInterface
      */
     public function getMapper()
     {
-        $this->mapper->entityNamespace = $this->namespace;
-
         return $this->mapper;
     }
 

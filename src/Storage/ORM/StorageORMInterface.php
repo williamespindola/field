@@ -1,12 +1,12 @@
 <?php
 
-namespace WilliamEspindola\Field\Persistence\ORM;
+namespace WilliamEspindola\Field\Storage\ORM;
 
 interface StorageORMInterface
 {
     /**
      * @param string $tableName
-     * @param array $data
+     * @param object $data
      * @return boolean
      */
     public function persist($tableName, $data);
@@ -18,6 +18,7 @@ interface StorageORMInterface
     /**
      * @param $tableName
      * @param array $criteria for optimizing your clauses
+     * @param Query optimization
      * @return void
      */
     public function findBy($tableName, array $criteria, $optimization);

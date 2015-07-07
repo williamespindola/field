@@ -64,7 +64,7 @@ class FieldTwigExtension extends Twig_Extension
     }
 
     /**
-     * @return $name Name of Field
+     * @param $name Name of Field
      * @return string Value of field
      */
     public function getFieldValue($name)
