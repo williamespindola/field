@@ -51,10 +51,10 @@ class Init extends Command
 <?php
 
 return [
-    'driver' => 'mysql'
-    'host'   => 'localhost'
-    'dbname'   => 'my_database'
-    'user'   => 'my_user'
+    'driver' => 'mysql',
+    'host'   => 'localhost',
+    'dbname'   => 'my_database',
+    'user'   => 'my_user',
     'password'   => 'my_pass'
 ];
 EOT;
