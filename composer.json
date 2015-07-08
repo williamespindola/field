@@ -42,5 +42,6 @@
   },
   "scripts": {
     "test": "phpunit"
-  }
+  },
+  "bin": ["bin/field"]
 }
