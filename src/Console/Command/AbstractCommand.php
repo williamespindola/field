@@ -4,7 +4,10 @@ namespace WilliamEspindola\Field\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 use Respect\Relational\Mapper;
+use Respect\Relational\Db;
 
 abstract class AbstractCommand extends Command
 {
@@ -64,7 +67,6 @@ abstract class AbstractCommand extends Command
 
     /**
      * @return Mapper
-     * TODO ORM can be suitable
      */
     public function getMapper()
     {
@@ -73,6 +75,17 @@ abstract class AbstractCommand extends Command
         $mapper->entityNamespace = '\\WilliamEspindola\\Field\\Entity\\';
 
         return $mapper;
+    }
+
+    /**
+     * @return Db
+     */
+    public function getDb()
+    {
+        $dsn    = "{$this->config['driver']}:host={$this->config['host']};dbname={$this->config['dbname']}";
+        $db = new Db(new \PDO($dsn, $this->config['user'], $this->config['password']));
+
+        return $db;
     }
 
     protected function loadConfig(InputInterface $input, OutputInterface $output)

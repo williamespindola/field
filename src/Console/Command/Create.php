@@ -13,6 +13,8 @@ class Create extends AbstractCommand
 {
     protected function configure()
     {
+        parent::configure();
+
         $this->setName('create')
             ->setDescription('Create a Field')
             ->addArgument('name', InputArgument::REQUIRED, 'The Name of field')

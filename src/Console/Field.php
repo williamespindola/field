@@ -15,7 +15,8 @@ class Field extends Application
 
         $this->addCommands([
             new Command\Init(),
-            new Command\Create()
+            new Command\Create(),
+            new Command\Schema()
         ]);
     }
 
