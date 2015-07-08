@@ -59,7 +59,7 @@ class Create extends AbstractCommand
             $entity->setLabel($input->getArgument('label'));
             $fieldRepository->save($entity);
 
-            if ($input->hasArgument('collection')) {
+            if ($input->getArgument('collection') != null) {
 
                 $collection = $collectionRepository->findOne(['name' => $input->getArgument('collection')]);
 
