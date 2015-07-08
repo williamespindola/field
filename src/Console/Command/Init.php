@@ -23,7 +23,10 @@ class Init extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $path = getcwd();
+        $path = $input->getArgument('path');
+
+        if (null === $path)
+            $path = getcwd();
 
         $path = realpath($path);
 
