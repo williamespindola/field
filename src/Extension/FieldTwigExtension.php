@@ -45,7 +45,7 @@ class FieldTwigExtension extends Twig_Extension
      */
     public function getField($name)
     {
-        return $this->fieldRepository->fetchBy(['name' => $name]);
+        return $this->fieldRepository->findOne(['name' => $name]);
     }
 
     /**
@@ -54,7 +54,7 @@ class FieldTwigExtension extends Twig_Extension
      */
     public function getOptionsOfField($name)
     {
-        $field = $this->fieldRepository->fetchBy(['name' => $name]);
+        $field = $this->fieldRepository->findOne(['name' => $name]);
         $field->options = $this->optionRepository->findBy(
             ['field_id' => $field->getId()],
             Sql::orderBy('id')
@@ -69,7 +69,7 @@ class FieldTwigExtension extends Twig_Extension
      */
     public function getFieldValue($name)
     {
-        $field = $this->fieldRepository->fetchBy(['name' => $name]);
+        $field = $this->fieldRepository->findOne(['name' => $name]);
 
         return $field->getValue();
     }

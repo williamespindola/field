@@ -25,6 +25,7 @@ class RespectRelational implements StorageORMInterface
     public function __construct(Mapper $mapper)
     {
         $this->setMapper($mapper);
+        $this->setEntityNamespace('\\WilliamEspindola\\Field\\Entity\\');
     }
 
     /**
