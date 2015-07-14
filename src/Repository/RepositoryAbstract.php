@@ -100,7 +100,6 @@ abstract class RepositoryAbstract
     }
 
     /**
-     * @param array $criteria
      * @return \ArrayObject
      */
     public function findAll()
