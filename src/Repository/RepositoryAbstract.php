@@ -4,90 +4,30 @@ namespace WilliamEspindola\Field\Repository;
 
 use WilliamEspindola\Field\Entity\EntityInterface;
 use WilliamEspindola\Field\Storage\ORM\StorageORMInterface;
-use Respect\Relational\Sql;
-use GeneratedHydrator\Configuration;
 
 abstract class RepositoryAbstract
 {
-    const INVALID_TABEL_NAME_MESSAGE = 'Invalid table name %s.';
-
     /**
-     * @var string $tableName
-     */
-    private $tableName;
-
-    /**
-     * @var object WilliamEspindola\Article\Entity\EntityInterface
-     */
-    protected $entity;
-
-    /**
-     * @var object WilliamEspindola\Article\Storage\ORM\StorageORMInterface
+     * @var object StorageORMInterface
      */
     protected $storage;
 
     public function __construct(
-        $tableName,
-        EntityInterface $entity,
+        $repository,
         StorageORMInterface $storage
     ) {
-        $this->setTableName($tableName);
-        $this->setEntity($entity);
-        $this->setStorage($storage);
+        $this->setStorage($storage, $repository);
     }
 
     /**
-     * @param string $tableName
-     * @throws \InvalidArgumentException
-     * @return RepositoryInterface
+     * @param StorageORMInterface $storage
+     * @param string $repository
+     * @return RepositoryAbstract
      */
-    public function setTableName($tableName)
+    public function setStorage(StorageORMInterface $storage, $repository)
     {
-        if (!is_string($tableName)) {
-            throw new \InvalidArgumentException(sprintf(
-                RepositoryAbstract::INVALID_TABEL_NAME_MESSAGE,
-                get_class($this)
-            ));
-        }
+        $this->storage = $storage->setRepository($repository);
 
-        $this->tableName = trim($tableName);
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTableName()
-    {
-        return $this->tableName;
-    }
-
-    /**
-     * @param WilliamEspindola\Article\Entity\EntityInterface
-     * @return RepositoryInterface
-     */
-    public function setEntity(EntityInterface $entity)
-    {
-        $this->entity = $entity;
-        return $this;
-    }
-
-    /**
-     * @return WilliamEspindola\Article\Entity\EntityInterface
-     */
-    public function getEntity()
-    {
-        return $this->entity;
-    }
-
-    /**
-     * @param WilliamEspindola\Article\Storage\ORM\StorageORMInterface
-     * @return RepositoryInterface
-     */
-    public function setStorage(StorageORMInterface $storage)
-    {
-        $this->storage = $storage;
         return $this;
     }
 
@@ -104,54 +44,47 @@ abstract class RepositoryAbstract
      */
     public function findAll()
     {
-        $resultSet = $this->getStorage()->findAll($this->getTableName());
-        return new \ArrayObject($resultSet);
+        return $this->getStorage()->findAll();
     }
 
     /**
      * @param array $criteria
+     * @param array $optimization
      * @return \ArrayObject
      */
-    public function findBy(Array $criteria, Sql $optimization)
+    public function findBy(Array $criteria, array $optimization)
     {
-        $resultSet = $this->getStorage()
-            ->findBy(
-                $this->getTableName(),
-                $criteria,
-                $optimization
-            );
-
-        return new \ArrayObject($resultSet);
+        return $this->getStorage()->findBy($criteria, $optimization);
     }
 
     /**
      * @param array $criteria
-     * @return WilliamEspindola\Article\Entity\EntityInterface
+     * @return EntityInterface
      */
-    public function findOne(array $criteria)
+    public function find($id)
     {
-        return $this->getStorage()->findOne($this->getTableName(), $criteria);
+        return $this->getStorage()->find($id);
     }
 
     /**
-     * @param WilliamEspindola\Article\Entity\EntityInterface
+     * @param EntityInterface $entity
      * @return boolean
      */
     public function save(EntityInterface $entity)
     {
-        $this->getStorage()->persist($this->getTableName(), $entity);
+        $this->getStorage()->persist($entity);
         $this->getStorage()->flush();
 
         return true;
     }
 
     /**
-     * @param WilliamEspindola\Article\Entity\EntityInterface
+     * @param EntityInterface $entity
      * @return boolean
      */
     public function remove(EntityInterface $entity)
     {
-        $this->getStorage()->remove($this->getTableName(), $entity);
+        $this->getStorage()->remove($entity);
         $this->getStorage()->flush();
 
         return true;

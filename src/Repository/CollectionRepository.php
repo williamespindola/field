@@ -2,7 +2,6 @@
 
 namespace WilliamEspindola\Field\Repository;
 
-use WilliamEspindola\Field\Entity\Collection;
 use WilliamEspindola\Field\Storage\ORM\StorageORMInterface;
 
 class CollectionRepository
@@ -11,6 +10,6 @@ class CollectionRepository
 {
     public function __construct(StorageORMInterface $storage)
     {
-        parent::__construct('collection', new Collection(), $storage);
+        parent::__construct('WilliamEspindola\Field\Entity\Collection', $storage);
     }
 }

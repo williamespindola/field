@@ -3,8 +3,8 @@
 namespace WilliamEspindola\Field\Storage\ORM;
 
 use Respect\Relational\Mapper;
-use Respect\Relational\Sql;
 use Respect\Data\Styles;
+use WilliamEspindola\Field\Entity\EntityInterface;
 
 /**
  * Providers the Respect\Relational\Mapper ORM behavior
@@ -25,75 +25,7 @@ class RespectRelational implements StorageORMInterface
     public function __construct(Mapper $mapper)
     {
         $this->setMapper($mapper);
-        $this->setEntityNamespace('\\WilliamEspindola\\Field\\Entity\\');
     }
-
-    /**
-     * @param namepsace entities
-     * @return void
-     */
-    public function setEntityNamespace($namespace)
-    {
-        $this->mapper->entityNamespace = $namespace;
-    }
-
-    /**
-     * @param string $tableName
-     * @param object $data
-     * @return boolean
-     */
-    public function persist($tableName, $data)
-    {
-        return $this->getMapper()->$tableName->persist($data);
-    }
-
-    /**
-     * @param string $tableName
-     * @param object $data
-     */
-    public function remove($tableName, $data)
-    {
-        $this->getMapper()->$tableName->remove($data);
-    }
-
-    /**
-     * @param $tableName
-     * @return array
-     */
-    public function findAll($tableName)
-    {
-        return $this->getMapper()->$tableName->fetchAll();
-    }
-
-    /**
-     * @param $tableName
-     * @param array $criteria for optimizing your clauses
-     * * @param Query optimization
-     * @return void
-     */
-    public function findBy($tableName, array $criteria, $optimization)
-    {
-        return $this->getMapper()->$tableName($criteria)->fetchAll($optimization);
-    }
-
-    /**
-     * @param $tableName
-     * @param array $criteria for optimizing your clauses
-     * @return object
-     */
-    public function findOne($tableName, array $criteria)
-    {
-        return $this->getMapper()->$tableName($criteria)->fetch();
-    }
-
-    /**
-     * @return object Respect\Relational\Mapper
-     */
-    public function getMapper()
-    {
-        return $this->mapper;
-    }
-
     /**
      * @param object Respect\Relational\Mapper
      * @throws \InvalidArgumentException
@@ -104,6 +36,80 @@ class RespectRelational implements StorageORMInterface
             throw new \InvalidArgumentException(RespectRelational::INVALID_MAPPER_MESSAGE);
 
         $this->mapper = $mapper;
+    }
+
+    /**
+     * @return object Respect\Relational\Mapper
+     */
+    public function getMapper()
+    {
+        return $this->mapper;
+    }
+
+    public function getRepository()
+    {
+        $repository = $this->repository;
+        $reflect = new \ReflectionClass(new $repository);
+        $tableName = strtolower($reflect->getShortName());
+        return $this->getMapper()->$tableName;
+    }
+
+    public function setRepository($repository)
+    {
+        $this->repository = $repository;
+
+        return $this;
+    }
+
+    /**
+     * @param $tableName
+     * @return array
+     */
+    public function findAll()
+    {
+        return $this->getRepository()->fetchAll();
+    }
+
+    /**
+     * @param string $tableName
+     * @param object $data
+     * @return boolean
+     */
+    public function persist(EntityInterface $entity)
+    {
+        return $this->getRepository()->persist($entity);
+    }
+
+    /**
+     * @param string $tableName
+     * @param object $data
+     */
+    public function remove(EntityInterface $entity)
+    {
+        $this->getRepository()->remove($entity);
+    }
+
+    /**
+     * @param $tableName
+     * @param array $criteria for optimizing your clauses
+     * * @param Query optimization
+     * @return void
+     */
+    public function findBy(array $criteria, array $optimization)
+    {
+        $repository = $this->getRepository();
+
+        return $repository($criteria)->fetchAll($optimization[0]);
+    }
+
+    /**
+     * @param $tableName
+     * @param array $criteria for optimizing your clauses
+     * @return object
+     */
+    public function find($id)
+    {
+        return $this->getRepository()[$id]->fetch();
     }
 
     /**

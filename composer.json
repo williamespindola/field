@@ -18,9 +18,11 @@
   ],
   "require": {
     "php" : ">=5.4",
-    "respect/relational": "^0.8",
+    "respect/relational": "",
     "ocramius/generated-hydrator": "1.1.0",
-    "symfony/console": "~2.7"
+    "symfony/console": "~2.7",
+    "doctrine/orm": "2.5.0",
+    "respect/relational": "^0.8"
   },
   "require-dev": {
     "phpunit/phpunit" : "4.*"

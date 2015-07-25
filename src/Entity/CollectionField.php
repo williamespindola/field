@@ -13,44 +13,44 @@ class CollectionField implements EntityInterface
     /**
      * @var object Field
      */
-    private $field_id;
+    private $field;
 
     /**
      * @var object Collection
      */
-    private $collection_id;
+    private $collection;
 
     /**
-     * @param object WilliamEspindola\Field\Entity\EntityInterface
+     * @param object EntityInterface
      * @return void
      */
-    public function setCollectionId(EntityInterface $collection_id)
+    public function setCollection(EntityInterface $collection)
     {
-        $this->collection_id = $collection_id;
+        $this->collection = $collection;
     }
 
     /**
      * @return object
      */
-    public function getCollectionId()
+    public function getCollection()
     {
-        return $this->collection_id;
+        return $this->collection;
     }
 
     /**
-     * @param object WilliamEspindola\Field\Entity\EntityInterface
+     * @param object EntityInterface
      */
-    public function setFieldId(EntityInterface $field_id)
+    public function setField(EntityInterface $field)
     {
-        $this->field_id = $field_id;
+        $this->field = $field;
     }
 
     /**
      * @return mixed
      */
-    public function getFieldId()
+    public function getField()
     {
-        return $this->field_id;
+        return $this->field;
     }
 
     /**

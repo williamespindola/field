@@ -23,7 +23,7 @@ abstract class AbstractCommand extends Command
     public function bootstrap(InputInterface $input, OutputInterface $output)
     {
         if (!$this->getConfig())
-            $this->loadConfig($input, $output);
+            $this->locateConfigFile($input);
     }
 
     protected function configure()
@@ -86,12 +86,6 @@ abstract class AbstractCommand extends Command
         $db = new Db(new \PDO($dsn, $this->config['user'], $this->config['password']));
 
         return $db;
-    }
-
-    protected function loadConfig(InputInterface $input, OutputInterface $output)
-    {
-        $configFilePath = $this->locateConfigFile($input);
-        $output->writeln('<info>using config file</info> .' . str_replace(getcwd(), '', realpath($configFilePath)));
     }
 
     public function getConfig()
