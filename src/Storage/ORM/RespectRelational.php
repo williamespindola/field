@@ -98,8 +98,9 @@ class RespectRelational implements StorageORMInterface
     public function findBy(array $criteria, array $optimization)
     {
         $repository = $this->getRepository();
+        $repository->setCondition($criteria);
 
-        return $repository($criteria)->fetchAll($optimization[0]);
+        return $repository->fetchAll($optimization[0]);
     }
 
     /**
@@ -109,7 +110,10 @@ class RespectRelational implements StorageORMInterface
      */
     public function find($id)
     {
-        return $this->getRepository()[$id]->fetch();
+        $repository = $this->getRepository();
+        $repository->setCondition(['id' => $id]);
+
+        return $repository->fetch();
     }
 
     /**
