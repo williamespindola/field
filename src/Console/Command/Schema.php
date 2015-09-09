@@ -37,10 +37,7 @@ class Schema extends AbstractCommand
             return;
         }
 
-        $db = $this->getDb();
-
-        $db->query("$schema")->exec();
-
+        $this->getStorage()->getExecuteQuery($schema);
 
         $output->writeln('<info>Schema has been installed</info>');
     }

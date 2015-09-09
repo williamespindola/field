@@ -8,7 +8,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use WilliamEspindola\Field\Repository\CollectionFieldRepository;
 use WilliamEspindola\Field\Repository\CollectionRepository;
 use WilliamEspindola\Field\Repository\FieldRepository;
-use WilliamEspindola\Field\Storage\ORM\RespectRelational;
 
 class Create extends AbstractCommand
 {
@@ -39,7 +38,7 @@ class Create extends AbstractCommand
     {
         $this->bootstrap($input, $output);
 
-        $storage = $this->getStorage();
+        $storage = $this->getStorage()->getMapperInstance();
 
         if ($input->getArgument('Field|Collection') === 'Collection') {
             $this->createCollection($input, $storage);

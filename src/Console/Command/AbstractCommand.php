@@ -6,8 +6,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Respect\Relational\Mapper;
-use Respect\Relational\Db;
+use WilliamEspindola\Field\Console\Command\Database\DoctrineStorage;
+use WilliamEspindola\Field\Console\Command\Database\RelationalStorage;
 
 abstract class AbstractCommand extends Command
 {
@@ -65,17 +65,6 @@ abstract class AbstractCommand extends Command
         $this->config = $configArray;
     }
 
-    /**
-     * @return Db
-     */
-    public function getDb()
-    {
-        $dsn    = "{$this->config['driver']}:host={$this->config['host']};dbname={$this->config['dbname']}";
-        $db = new Db(new \PDO($dsn, $this->config['user'], $this->config['password']));
-
-        return $db;
-    }
-
     public function getConfig()
     {
         return $this->config;
@@ -83,12 +72,10 @@ abstract class AbstractCommand extends Command
 
     public function getStorage()
     {
-        $dsn    = "{$this->config['driver']}:host={$this->config['host']};dbname={$this->config['dbname']}";
-
         if (class_exists('Doctrine\ORM\Tools\Setup')) {
-            return new \WilliamEspindola\Field\Console\Database\DoctrineStorage();
+            return new DoctrineStorage($this->getConfig());
         } else {
-            return new \WilliamEspindola\Field\Console\Database\RelationalStorage();
+            return new RelationalStorage($this->getConfig());
         }
     }
 } 
