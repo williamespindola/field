@@ -4,7 +4,7 @@ namespace WilliamEspindola\Field\Storage\ORM;
 
 use Respect\Relational\Mapper;
 use Respect\Data\Styles;
-use WilliamEspindola\Field\Entity\EntityInterface;
+use \InvalidArgumentException as Argument;
 
 /**
  * Providers the Respect\Relational\Mapper ORM behavior
@@ -71,20 +71,22 @@ class RespectRelational implements StorageORMInterface
     }
 
     /**
-     * @param string $tableName
-     * @param object $data
+     * @param object $object
      * @return boolean
      */
-    public function persist(EntityInterface $entity)
+    public function persist($object)
     {
-        return $this->getRepository()->persist($entity);
+        if (!is_object($object))
+            throw new Argument('The param must be an object');
+
+        return $this->getRepository()->persist($object);
     }
 
     /**
      * @param string $tableName
      * @param object $data
      */
-    public function remove(EntityInterface $entity)
+    public function remove($entity)
     {
         $this->getRepository()->remove($entity);
     }

@@ -10,6 +10,6 @@ class CollectionRepository
 {
     public function __construct(StorageORMInterface $storage)
     {
-        parent::__construct('WilliamEspindola\Field\Entity\Collection', $storage);
+        $this->setStorage($storage, 'WilliamEspindola\Field\Entity\Collection');
     }
 }

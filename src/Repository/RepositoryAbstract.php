@@ -12,13 +12,6 @@ abstract class RepositoryAbstract
      */
     protected $storage;
 
-    public function __construct(
-        $repository,
-        StorageORMInterface $storage
-    ) {
-        $this->setStorage($storage, $repository);
-    }
-
     /**
      * @param StorageORMInterface $storage
      * @param string $repository
@@ -67,12 +60,12 @@ abstract class RepositoryAbstract
     }
 
     /**
-     * @param EntityInterface $entity
+     * @param EntityInterface|Object $data
      * @return boolean
      */
-    public function save(EntityInterface $entity)
+    public function save($data)
     {
-        $this->getStorage()->persist($entity);
+        $this->getStorage()->persist($data);
         $this->getStorage()->flush();
 
         return true;

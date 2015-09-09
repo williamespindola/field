@@ -66,18 +66,6 @@ abstract class AbstractCommand extends Command
     }
 
     /**
-     * @return Mapper
-     */
-    public function getMapper()
-    {
-        $dsn    = "{$this->config['driver']}:host={$this->config['host']};dbname={$this->config['dbname']}";
-        $mapper = new Mapper(new \PDO($dsn, $this->config['user'], $this->config['password']));
-        $mapper->entityNamespace = '\\WilliamEspindola\\Field\\Entity\\';
-
-        return $mapper;
-    }
-
-    /**
      * @return Db
      */
     public function getDb()
@@ -91,5 +79,16 @@ abstract class AbstractCommand extends Command
     public function getConfig()
     {
         return $this->config;
+    }
+
+    public function getStorage()
+    {
+        $dsn    = "{$this->config['driver']}:host={$this->config['host']};dbname={$this->config['dbname']}";
+
+        if (class_exists('Doctrine\ORM\Tools\Setup')) {
+            return new \WilliamEspindola\Field\Console\Database\DoctrineStorage();
+        } else {
+            return new \WilliamEspindola\Field\Console\Database\RelationalStorage();
+        }
     }
 } 

@@ -76,9 +76,13 @@ class Doctrine implements StorageORMInterface
     /**
      * @param EntityInterface $entity
      * @return boolean
+     * @throws InvalidArgumentException if the param is not instance of EntityInterface
      */
-    public function persist(EntityInterface $entity)
+    public function persist($entity)
     {
+        if (!$entity instanceof EntityInterface)
+            throw new Argument('The param must be instance of EntityInterface');
+
         return $this->getRepository()->persist($entity);
     }
 

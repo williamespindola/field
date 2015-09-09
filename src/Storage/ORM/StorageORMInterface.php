@@ -31,10 +31,10 @@ interface StorageORMInterface
     /**
      * Persist new entity
      *
-     * @param EntityInterface $entity
+     * @param $entity
      * @return boolean
      */
-    public function persist(EntityInterface $entity);
+    public function persist($entity);
 
     /**
      * Return all data from repository
@@ -66,4 +66,15 @@ interface StorageORMInterface
      * @return boolean
      */
     public function flush();
+
+    /**
+     * @return mixed
+     */
+    public function getRepository();
+
+    /**
+     * @param $repository
+     * @return mixed
+     */
+    public function setRepository($repository);
 } 
