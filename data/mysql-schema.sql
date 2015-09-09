@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `collection` (
   PRIMARY KEY (`id`))
   ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `collection_field` (
+CREATE TABLE IF NOT EXISTS `collectionfield` (
   `collection_id` INT NOT NULL,
   `field_id` INT NOT NULL,
   `id` INT NOT NULL AUTO_INCREMENT,

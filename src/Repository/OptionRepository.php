@@ -2,7 +2,6 @@
 
 namespace WilliamEspindola\Field\Repository;
 
-use WilliamEspindola\Field\Entity\Option;
 use WilliamEspindola\Field\Storage\ORM\StorageORMInterface;
 
 class OptionRepository
@@ -11,6 +10,6 @@ class OptionRepository
 {
     public function __construct(StorageORMInterface $storage)
     {
-        parent::__construct('option', new Option(), $storage);
+        $this->setStorage($storage, 'WilliamEspindola\Field\Entity\Option');
     }
 }

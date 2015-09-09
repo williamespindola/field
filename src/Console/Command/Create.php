@@ -5,13 +5,9 @@ namespace WilliamEspindola\Field\Console\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
-use WilliamEspindola\Field\Entity\Field;
-use WilliamEspindola\Field\Entity\Collection;
-use WilliamEspindola\Field\Entity\CollectionField;
 use WilliamEspindola\Field\Repository\CollectionFieldRepository;
 use WilliamEspindola\Field\Repository\CollectionRepository;
 use WilliamEspindola\Field\Repository\FieldRepository;
-use WilliamEspindola\Field\Storage\ORM\RespectRelational;
 
 class Create extends AbstractCommand
 {
@@ -37,47 +33,91 @@ class Create extends AbstractCommand
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int|null|void
-     *
-     * TODO Remove the if/else
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->bootstrap($input, $output);
 
-        $mapper     = $this->getMapper();
-        $relational = new RespectRelational($mapper);
-        $fieldRepository = new FieldRepository($relational);
-        $collectionRepository = new CollectionRepository($relational);
-        $collectionFieldRepository = new CollectionFieldRepository($relational);
+        $storage = $this->getStorage()->getMapperInstance();
 
-        $entity      = $input->getArgument('Field|Collection');
-
-        if ($entity === 'Field') {
-            $entity      = new Field();
-            $entity->setType($input->getArgument('type'));
-            $entity->setName($input->getArgument('name'));
-            $entity->setLabel($input->getArgument('label'));
-            $fieldRepository->save($entity);
-
-            if ($input->getArgument('collection') != null) {
-
-                $collection = $collectionRepository->findOne(['name' => $input->getArgument('collection')]);
-
-                if (!$collection) {
-                    $output->writeln('<error>The Collection ' . $input->getArgument('collection') . ' not found.</error>');
-                    return;
-                }
-
-                $collectionField = new CollectionField();
-                $collectionField->setFieldId($entity);
-                $collectionField->setCollectionId($collection);
-                $collectionFieldRepository->save($collectionField);
-            }
-        } else {
-            $entity      = new Collection();
-            $entity->setName($input->getArgument('name'));
-            $entity->setLabel($input->getArgument('label'));
-            $collectionRepository->save($entity);
+        if ($input->getArgument('Field|Collection') === 'Collection') {
+            $this->createCollection($input, $storage);
+            $output->writeln('<info>Collection ' . $input->getArgument('name') . ' was been created.</info>');
+            return;
         }
+
+        if ($input->getArgument('collection') != null) {
+            $collection = $this->findACollection($input, $storage);
+            if (!$collection) {
+                $output->writeln('<error>The Collection ' . $input->getArgument('collection') . ' not found.</error>');
+                return;
+            }
+
+            $field = $this->createField($input, $storage);
+            $this->createTheFieldCollectionRelationship($field, $collection[0], $storage);
+            $output->writeln(
+                '<info>Field '
+                . $input->getArgument('name')
+                . ' was been created with to collection '
+                . $input->getArgument('collection')
+                . '</info>');
+            return;
+        }
+
+        $this->createField($input, $storage);
+        $output->writeln('<info>Field ' . $input->getArgument('name') . ' was been created.</info>');
+    }
+
+    private function createCollection(InputInterface $input, $storage)
+    {
+        $collectionRepository   = new CollectionRepository($storage);
+
+        $collection = (object)([
+            'name' => $input->getArgument('name'),
+            'label' => $input->getArgument('label')
+        ]);
+
+        $collectionRepository->save($collection);
+
+        return $collection;
+    }
+
+    private function createField(InputInterface $input, $storage)
+    {
+        $fieldRepository    = new FieldRepository($storage);
+
+        $field = (object)([
+            'type' => $input->getArgument('type'),
+            'name' => $input->getArgument('name'),
+            'label' => $input->getArgument('label')
+        ]);
+
+        $fieldRepository->save($field);
+
+        return $field;
+    }
+
+    private function findACollection(InputInterface $input, $storage)
+    {
+        $collectionRepository = new CollectionRepository($storage);
+
+        return $collectionRepository->findBy(
+            ['name' => $input->getArgument('collection')],
+            ['order by name']
+        );
+    }
+
+    private function createTheFieldCollectionRelationship($entity, $collection, $storage)
+    {
+        $collectionFieldRepository = new CollectionFieldRepository($storage);
+
+        $collectionField = (object)([
+            'field_id' => $entity,
+            'collection_id' => $collection
+        ]);
+
+        $collectionFieldRepository->save($collectionField);
+
+        return $collectionField;
     }
 }

@@ -7,8 +7,28 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-A simple back-end life circle for fields inspired on [cockpit](http://getcockpit.com/).
-Via command line you can create fields for your partials and consume in your project using he Repository, Services or Extensions
+Field is a blueprint to work as a CMS inpired on [cockpit](http://getcockpit.com/).
+Via command line you can create fields for your partials and consume in your project using Repository, Services or Extensions.
+
+### Example
+
+Create some field, running this in your terminal
+```bash
+php vendor/bin/field create Collection about "About page"
+php vendor/bin/field create Field textfield "About text" text about
+php vendor/bin/field create Field imagefield "About image" text about
+```
+
+With this code you will create a collection called "About page" and two field for him "About text" and "About image". So you can get this using the Repository:
+```php
+use WilliamEspindola\Field\Storage\ORM\Doctrine;
+use WilliamEspindola\Field\Repository\CollectionFieldRepository;
+
+$doctrineStorage    = new Doctrine(/** doctrine setup */); // you can uss orther ORM as you want
+$repository         = new CollectionFieldRepository($doctrineStorage);
+
+$repository->findAll()
+```
 
 ## Install
 

@@ -6,8 +6,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Respect\Relational\Mapper;
-use Respect\Relational\Db;
+use WilliamEspindola\Field\Console\Command\Database\DoctrineStorage;
+use WilliamEspindola\Field\Console\Command\Database\RelationalStorage;
 
 abstract class AbstractCommand extends Command
 {
@@ -23,7 +23,7 @@ abstract class AbstractCommand extends Command
     public function bootstrap(InputInterface $input, OutputInterface $output)
     {
         if (!$this->getConfig())
-            $this->loadConfig($input, $output);
+            $this->locateConfigFile($input);
     }
 
     protected function configure()
@@ -65,37 +65,17 @@ abstract class AbstractCommand extends Command
         $this->config = $configArray;
     }
 
-    /**
-     * @return Mapper
-     */
-    public function getMapper()
-    {
-        $dsn    = "{$this->config['driver']}:host={$this->config['host']};dbname={$this->config['dbname']}";
-        $mapper = new Mapper(new \PDO($dsn, $this->config['user'], $this->config['password']));
-        $mapper->entityNamespace = '\\WilliamEspindola\\Field\\Entity\\';
-
-        return $mapper;
-    }
-
-    /**
-     * @return Db
-     */
-    public function getDb()
-    {
-        $dsn    = "{$this->config['driver']}:host={$this->config['host']};dbname={$this->config['dbname']}";
-        $db = new Db(new \PDO($dsn, $this->config['user'], $this->config['password']));
-
-        return $db;
-    }
-
-    protected function loadConfig(InputInterface $input, OutputInterface $output)
-    {
-        $configFilePath = $this->locateConfigFile($input);
-        $output->writeln('<info>using config file</info> .' . str_replace(getcwd(), '', realpath($configFilePath)));
-    }
-
     public function getConfig()
     {
         return $this->config;
+    }
+
+    public function getStorage()
+    {
+        if (class_exists('Doctrine\ORM\Tools\Setup')) {
+            return new DoctrineStorage($this->getConfig());
+        } else {
+            return new RelationalStorage($this->getConfig());
+        }
     }
 } 

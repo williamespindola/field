@@ -2,7 +2,6 @@
 
 namespace WilliamEspindola\Field\Repository;
 
-use WilliamEspindola\Field\Entity\Field;
 use WilliamEspindola\Field\Storage\ORM\StorageORMInterface;
 
 class FieldRepository
@@ -11,6 +10,6 @@ class FieldRepository
 {
     public function __construct(StorageORMInterface $storage)
     {
-        parent::__construct('field', new Field(), $storage);
+        $this->setStorage($storage, 'WilliamEspindola\Field\Entity\Field');
     }
 }
