@@ -6,7 +6,12 @@ use Twig_Extension;
 use Twig_Function_Method;
 use WilliamEspindola\Field\Repository\FieldRepository;
 use WilliamEspindola\Field\Repository\OptionRepository;
+use Respect\Relational\Mapper;
 
+/**
+ * Class FieldTwigExtension
+ * @package WilliamEspindola\Field\Extension
+ */
 class FieldTwigExtension extends Twig_Extension
 {
     /**
@@ -19,12 +24,22 @@ class FieldTwigExtension extends Twig_Extension
      */
     protected $optionService;
 
+    /**
+     * @param FieldRepository $fieldRepository
+     * @param OptionRepository $optionRepository
+     */
     public function __construct(
         FieldRepository $fieldRepository,
         OptionRepository $optionRepository
     ) {
         $this->fieldRepository = $fieldRepository;
         $this->optionRepository = $optionRepository;
+
+        if ($this->fieldRepository->getStorage()->getMapper() instanceof Mapper) {
+            $this->fieldService = new RespectFieldService($this->fieldRepository);
+        } else {
+            $this->fieldService = new DoctrineFieldService($this->fieldRepository);
+        }
     }
 
     /**
@@ -45,7 +60,7 @@ class FieldTwigExtension extends Twig_Extension
      */
     public function getField($name)
     {
-        return $this->fieldRepository->findOne(['name' => $name]);
+        return $this->fieldService->findOneByName($name);
     }
 
     /**
@@ -54,13 +69,9 @@ class FieldTwigExtension extends Twig_Extension
      */
     public function getOptionsOfField($name)
     {
-        $field = $this->fieldRepository->findOne(['name' => $name]);
-        $field->options = $this->optionRepository->findBy(
-            ['field_id' => $field->getId()],
-            Sql::orderBy('id')
-        );
+        $field = $this->fieldService->findOneByName($name);
 
-        return $field;
+        return $this->optionService->getOptionsOfField($field, 'id');
     }
 
     /**
@@ -69,9 +80,7 @@ class FieldTwigExtension extends Twig_Extension
      */
     public function getFieldValue($name)
     {
-        $field = $this->fieldRepository->findOne(['name' => $name]);
-
-        return $field->getValue();
+        return $this->fieldService->findOneByNameAndGetValue($name);
     }
 
     /**

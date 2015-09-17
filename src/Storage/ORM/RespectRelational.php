@@ -22,6 +22,11 @@ class RespectRelational implements StorageORMInterface
      */
     protected $mapper;
 
+    /**
+     * @var string table name
+     */
+    protected $repository;
+
     public function __construct(Mapper $mapper)
     {
         $this->setMapper($mapper);
@@ -46,23 +51,27 @@ class RespectRelational implements StorageORMInterface
         return $this->mapper;
     }
 
-    public function getRepository()
-    {
-        $repository = $this->repository;
-        $reflect = new \ReflectionClass(new $repository);
-        $tableName = strtolower($reflect->getShortName());
-        return $this->getMapper()->$tableName;
-    }
-
     public function setRepository($repository)
     {
+        if (empty($repository))
+            throw new Argument('repository param can not be null');
+
+        if (class_exists($repository)) {
+            $reflect    = new \ReflectionClass(new $repository);
+            $repository = strtolower($reflect->getShortName());
+        }
+
         $this->repository = $repository;
 
         return $this;
     }
 
+    public function getRepository()
+    {
+        return $this->getMapper()->$this->repository;
+    }
+
     /**
-     * @param $tableName
      * @return array
      */
     public function findAll()
