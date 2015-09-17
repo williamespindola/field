@@ -29,7 +29,12 @@ class DoctrineFieldService
      */
     public function findOneByName($name)
     {
-        return $this->repository->findBy(['name' => $name], ['order' => 'name']);
+        $field = $this->repository->findBy(
+            ['name' => $name],
+            [['name' => 'ASC'], null, null]
+        );
+
+        return $field ? $field[0] : false;
     }
 
     /**
@@ -38,7 +43,10 @@ class DoctrineFieldService
      */
     public function findOneByNameAndGetValue($name)
     {
-        $fields = $this->repository->findBy(['name' => $name], ['order' => 'name']);
+        $fields = $this->repository->findBy(
+            ['name' => $name],
+            [['name' => 'ASC'], null, null]
+        );
 
         if (!$fields)
             return;

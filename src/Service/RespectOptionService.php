@@ -31,7 +31,7 @@ class RespectOptionService
      */
     public function getOptionsOfField($field, $order)
     {
-        return $this->optionRepository->findBy(
+        return $this->repository->findBy(
             ['field_id' => $field->id],
             Sql::orderBy($order)
         );

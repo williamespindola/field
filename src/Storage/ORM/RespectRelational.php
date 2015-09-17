@@ -58,7 +58,7 @@ class RespectRelational implements StorageORMInterface
 
         if (class_exists($repository)) {
             $reflect    = new \ReflectionClass(new $repository);
-            $repository = strtolower($reflect->getShortName());
+            $repository = strtolower($reflect->getShowrtName());
         }
 
         $this->repository = $repository;

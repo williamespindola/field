@@ -5,7 +5,8 @@ namespace WilliamEspindola\Field\Extension;
 use Twig_Extension;
 use Twig_Function_Method;
 use WilliamEspindola\Field\Repository\FieldRepository;
-use WilliamEspindola\Field\Repository\OptionRepository;
+use WilliamEspindola\Field\Service\DoctrineFieldService;
+use WilliamEspindola\Field\Service\RespectFieldService;
 use Respect\Relational\Mapper;
 
 /**
@@ -15,30 +16,25 @@ use Respect\Relational\Mapper;
 class FieldTwigExtension extends Twig_Extension
 {
     /**
-     * @var \WilliamEspindola\Field\Repository\FieldRepository
+     * @var
      */
-    protected $fieldRepository;
+    protected $fieldService;
 
     /**
-     * @var \WilliamEspindola\Field\Repository\OptionRepository
+     * @var
      */
     protected $optionService;
 
     /**
      * @param FieldRepository $fieldRepository
-     * @param OptionRepository $optionRepository
      */
     public function __construct(
-        FieldRepository $fieldRepository,
-        OptionRepository $optionRepository
+        FieldRepository $fieldRepository
     ) {
-        $this->fieldRepository = $fieldRepository;
-        $this->optionRepository = $optionRepository;
-
-        if ($this->fieldRepository->getStorage()->getMapper() instanceof Mapper) {
-            $this->fieldService = new RespectFieldService($this->fieldRepository);
+        if ($fieldRepository->getStorage()->getMapper() instanceof Mapper) {
+            $this->fieldService = new RespectFieldService($fieldRepository);
         } else {
-            $this->fieldService = new DoctrineFieldService($this->fieldRepository);
+            $this->fieldService = new DoctrineFieldService($fieldRepository);
         }
     }
 
@@ -61,17 +57,6 @@ class FieldTwigExtension extends Twig_Extension
     public function getField($name)
     {
         return $this->fieldService->findOneByName($name);
-    }
-
-    /**
-     * @param $name Name of Field
-     * @return array Field Object with your options
-     */
-    public function getOptionsOfField($name)
-    {
-        $field = $this->fieldService->findOneByName($name);
-
-        return $this->optionService->getOptionsOfField($field, 'id');
     }
 
     /**

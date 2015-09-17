@@ -28,11 +28,11 @@ class DoctrineOptionService
      * @param String $order
      * @return ArrayObject Options of field
      */
-    public function getOptionsOfField($field, $order)
+    public function getOptionsOfField($field, Array $order)
     {
-        return $this->optionRepository->findBy(
+        return $this->repository->findBy(
             ['field_id' => $field->getId()],
-            ['order' => $order]
+            [$order, null, null]
         );
     }
 }
