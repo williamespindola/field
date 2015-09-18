@@ -2,7 +2,7 @@
 
 namespace WilliamEspindola\Field\Entity;
 
-class Option implements EntityInterface
+class Options implements EntityInterface
 {
     /**
      * @var integer
@@ -12,27 +12,27 @@ class Option implements EntityInterface
     /**
      * @var text
      */
-    private $option;
+    private $value;
 
     /**
      * $var object WilliamEspindola\Field\Entity\Field
      */
-    private $field_id;
+    private $field;
 
     /**
-     * @param mixed $field_id
+     * @param mixed $field
      */
-    public function setFieldId($field_id)
+    public function setField($field)
     {
-        $this->field_id = $field_id;
+        $this->field = $field;
     }
 
     /**
      * @return mixed
      */
-    public function getFieldId()
+    public function getField()
     {
-        return $this->field_id;
+        return $this->field;
     }
 
     /**
@@ -52,18 +52,18 @@ class Option implements EntityInterface
     }
 
     /**
-     * @param text $option
+     * @param text $value
      */
-    public function setOption($option)
+    public function setValue($value)
     {
-        $this->option = $option;
+        $this->value = $value;
     }
 
     /**
      * @return text
      */
-    public function getOption()
+    public function getValue()
     {
-        return $this->option;
+        return $this->value;
     }
 }

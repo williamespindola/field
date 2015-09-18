@@ -10,6 +10,6 @@ class OptionRepository
 {
     public function __construct(StorageORMInterface $storage)
     {
-        $this->setStorage($storage, 'WilliamEspindola\Field\Entity\Option');
+        $this->setStorage($storage, 'WilliamEspindola\Field\Entity\Options');
     }
 }

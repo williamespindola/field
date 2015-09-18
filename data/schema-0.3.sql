@@ -53,9 +53,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`collection_field`
+-- Table `mydb`.`collectionfield`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`collection_field` (
+CREATE TABLE IF NOT EXISTS `mydb`.`collectionfield` (
   `collection_id` INT NOT NULL,
   `field_id` INT NOT NULL,
   `id` INT NOT NULL AUTO_INCREMENT,

@@ -1,16 +1,15 @@
-<!-- config/xml/Option.dcm.xml -->
+<!-- config/xml/CollectionField.dcm.xml -->
 <doctrine-mapping
     xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
 
-    <entity name="option">
+    <entity name="WilliamEspindola\Field\Entity\CollectionField" table="collectionfield">
         <id name="id" type="integer">
             <generator strategy="AUTO" />
         </id>
 
-        <field name="option" type="string" />
-
-        <many-to-one target-entity="WilliamEspindola\Field\Entity\Field" field="field" />
+        <many-to-one field="field" target-entity="WilliamEspindola\Field\Entity\Field" />
+        <many-to-one field="collection" target-entity="WilliamEspindola\Field\Entity\Collection" />
     </entity>
 </doctrine-mapping>

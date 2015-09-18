@@ -5,26 +5,37 @@ namespace WilliamEspindola\Field\Extension;
 use Twig_Extension;
 use Twig_Function_Method;
 use WilliamEspindola\Field\Repository\FieldRepository;
-use WilliamEspindola\Field\Repository\OptionRepository;
+use WilliamEspindola\Field\Service\DoctrineFieldService;
+use WilliamEspindola\Field\Service\RespectFieldService;
+use Respect\Relational\Mapper;
 
+/**
+ * Class FieldTwigExtension
+ * @package WilliamEspindola\Field\Extension
+ */
 class FieldTwigExtension extends Twig_Extension
 {
     /**
-     * @var \WilliamEspindola\Field\Repository\FieldRepository
+     * @var
      */
-    protected $fieldRepository;
+    protected $fieldService;
 
     /**
-     * @var \WilliamEspindola\Field\Repository\OptionRepository
+     * @var
      */
     protected $optionService;
 
+    /**
+     * @param FieldRepository $fieldRepository
+     */
     public function __construct(
-        FieldRepository $fieldRepository,
-        OptionRepository $optionRepository
+        FieldRepository $fieldRepository
     ) {
-        $this->fieldRepository = $fieldRepository;
-        $this->optionRepository = $optionRepository;
+        if ($fieldRepository->getStorage()->getMapper() instanceof Mapper) {
+            $this->fieldService = new RespectFieldService($fieldRepository);
+        } else {
+            $this->fieldService = new DoctrineFieldService($fieldRepository);
+        }
     }
 
     /**
@@ -45,22 +56,7 @@ class FieldTwigExtension extends Twig_Extension
      */
     public function getField($name)
     {
-        return $this->fieldRepository->findOne(['name' => $name]);
-    }
-
-    /**
-     * @param $name Name of Field
-     * @return array Field Object with your options
-     */
-    public function getOptionsOfField($name)
-    {
-        $field = $this->fieldRepository->findOne(['name' => $name]);
-        $field->options = $this->optionRepository->findBy(
-            ['field_id' => $field->getId()],
-            Sql::orderBy('id')
-        );
-
-        return $field;
+        return $this->fieldService->findOneByName($name);
     }
 
     /**
@@ -69,9 +65,7 @@ class FieldTwigExtension extends Twig_Extension
      */
     public function getFieldValue($name)
     {
-        $field = $this->fieldRepository->findOne(['name' => $name]);
-
-        return $field->getValue();
+        return $this->fieldService->findOneByNameAndGetValue($name);
     }
 
     /**
