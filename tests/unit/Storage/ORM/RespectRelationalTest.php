@@ -107,11 +107,7 @@ class RespectRelationalTest extends \PHPUnit_Framework_TestCase
                             ->disableOriginalConstructor()
                             ->getMock();
 
-        $collection = $this->getMock(
-            'Respect\Data\Collections\Collection',
-            ['setMapper'],
-            ['mytable']
-        );
+        $collection = $this->getMock('Respect\Data\Collections\Collection');
 
         $mapper->expects($this->any())
             ->method('__get')
