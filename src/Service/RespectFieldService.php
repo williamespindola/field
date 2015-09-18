@@ -29,7 +29,9 @@ class RespectFieldService
      */
     public function findOneByName($name)
     {
-        return $this->repository->findBy(['name' => $name], ['order by name asc']);
+        $field = $this->repository->findBy(['name' => $name], ['order by name asc']);
+
+        return $field ? $field[0] : false;
     }
 
     /**
