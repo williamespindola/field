@@ -6,15 +6,9 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Table `field`
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-USE `mydb` ;
-
--- -----------------------------------------------------
--- Table `mydb`.`field`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`field` (
+CREATE TABLE IF NOT EXISTS `field` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
   `type` VARCHAR(255) NOT NULL,
@@ -25,9 +19,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`option`
+-- Table `option`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`option` (
+CREATE TABLE IF NOT EXISTS `option` (
   `id` INT NOT NULL,
   `option` TEXT NULL,
   `field_id` INT NOT NULL,
@@ -35,16 +29,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`option` (
   INDEX `fk_options_field_idx` (`field_id` ASC),
   CONSTRAINT `fk_options_field`
     FOREIGN KEY (`field_id`)
-    REFERENCES `mydb`.`field` (`id`)
+    REFERENCES `field` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`collection`
+-- Table `collection`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`collection` (
+CREATE TABLE IF NOT EXISTS `collection` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
   `label` VARCHAR(255) NOT NULL,
@@ -53,9 +47,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`collectionfield`
+-- Table `collectionfield`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`collectionfield` (
+CREATE TABLE IF NOT EXISTS `collectionfield` (
   `collection_id` INT NOT NULL,
   `field_id` INT NOT NULL,
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -64,12 +58,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`collectionfield` (
   INDEX `fk_collection_has_field_collection1_idx` (`collection_id` ASC),
   CONSTRAINT `fk_collection_has_field_collection1`
     FOREIGN KEY (`collection_id`)
-    REFERENCES `mydb`.`collection` (`id`)
+    REFERENCES `collection` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_collection_has_field_field1`
     FOREIGN KEY (`field_id`)
-    REFERENCES `mydb`.`field` (`id`)
+    REFERENCES `field` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
