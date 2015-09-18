@@ -2,8 +2,6 @@
 
 use WilliamEspindola\Field\Storage\ORM\RespectRelational;
 
-use Respect\Relational\Mapper;
-
 class RespectRelationalTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
@@ -57,6 +55,9 @@ class RespectRelationalTest extends \PHPUnit_Framework_TestCase
         $instance->setRepository('');
     }
 
+    /**
+     * @depends testSetRepositoryWithInvalidValueShouldThrowAndException
+     */
     public function testSetRepositoryWithAValidNamespaceShouldWork()
     {
         $instance   = new RespectRelational($this->mapper);
@@ -71,6 +72,9 @@ class RespectRelationalTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @depends testSetRepositoryWithAValidNamespaceShouldWork
+     */
     public function testSetRepositoryWithValidStringShouldWork()
     {
         $instance   = new RespectRelational($this->mapper);
@@ -81,31 +85,6 @@ class RespectRelationalTest extends \PHPUnit_Framework_TestCase
             'mytable',
             PHPUnit_Framework_Assert::readAttribute($instance, 'repository'),
             'The attribute repository is not instance of the string table name: mytable'
-        );
-    }
-
-    public function testGetRepositoryShouldReturnMockedInstance()
-    {
-        $conn = $this->getMock(
-            'PDO',
-            array('lastInsertId'),
-            array('sqlite::memory:')
-        );
-        $conn->exec('CREATE TABLE mytable(id INTEGER PRIMARY KEY)');
-        $conn->expects($this->any())
-            ->method('lastInsertId')
-            ->will($this->throwException(new \PDOException));
-
-
-        $mapper = new Mapper($conn);
-
-        $instance = new RespectRelational($mapper);
-        $instance->setRepository('mytable');
-
-        $this->assertEquals(
-            'mytable',
-            $instance->getRepository(),
-            'is not mytable'
         );
     }
 } 
