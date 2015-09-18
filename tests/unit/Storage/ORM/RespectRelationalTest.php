@@ -87,39 +87,4 @@ class RespectRelationalTest extends \PHPUnit_Framework_TestCase
             'The attribute repository is not instance of the string table name: mytable'
         );
     }
-
-    /**
-     * @depends testSetRepositoryWithValidStringShouldWork
-     */
-    public function testGetRepositoryShouldReturnMockedInstance()
-    {
-        $conn = $this->getMock(
-            'PDO',
-            ['lastInsertId'],
-            ['sqlite::memory:']
-        );
-        $conn->exec('CREATE TABLE mytable(id INTEGER PRIMARY KEY)');
-        $conn->expects($this->any())
-            ->method('lastInsertId')
-            ->will($this->throwException(new \PDOException));
-
-        $mapper = $this->getMockBuilder('Respect\Relational\Mapper')
-                            ->disableOriginalConstructor()
-                            ->getMock();
-
-        $collection = $this->getMock('Respect\Data\Collections\Collection');
-
-        $mapper->expects($this->any())
-            ->method('__get')
-            ->will($this->returnValue($collection));
-
-        $instance = new RespectRelational($mapper);
-        $instance->setRepository('mytable');
-
-        $this->assertInstanceOf(
-            'Respect\Data\Collections\Collection',
-            $instance->getRepository(),
-            'The instance returned by getRepository is not instance of Respect\Data\Collections\Collection'
-        );
-    }
 } 
