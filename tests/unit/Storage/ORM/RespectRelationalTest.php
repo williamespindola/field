@@ -2,8 +2,6 @@
 
 use WilliamEspindola\Field\Storage\ORM\RespectRelational;
 
-use Respect\Relational\Mapper;
-
 class RespectRelationalTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
@@ -57,6 +55,9 @@ class RespectRelationalTest extends \PHPUnit_Framework_TestCase
         $instance->setRepository('');
     }
 
+    /**
+     * @depends testSetRepositoryWithInvalidValueShouldThrowAndException
+     */
     public function testSetRepositoryWithAValidNamespaceShouldWork()
     {
         $instance   = new RespectRelational($this->mapper);
@@ -71,6 +72,9 @@ class RespectRelationalTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @depends testSetRepositoryWithAValidNamespaceShouldWork
+     */
     public function testSetRepositoryWithValidStringShouldWork()
     {
         $instance   = new RespectRelational($this->mapper);
@@ -84,28 +88,42 @@ class RespectRelationalTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @depends testSetRepositoryWithValidStringShouldWork
+     */
     public function testGetRepositoryShouldReturnMockedInstance()
     {
         $conn = $this->getMock(
             'PDO',
-            array('lastInsertId'),
-            array('sqlite::memory:')
+            ['lastInsertId'],
+            ['sqlite::memory:']
         );
         $conn->exec('CREATE TABLE mytable(id INTEGER PRIMARY KEY)');
         $conn->expects($this->any())
             ->method('lastInsertId')
             ->will($this->throwException(new \PDOException));
 
+        $mapper = $this->getMockBuilder('Respect\Relational\Mapper')
+                            ->disableOriginalConstructor()
+                            ->getMock();
 
-        $mapper = new Mapper($conn);
+        $collection = $this->getMock(
+            'Respect\Data\Collections\Collection',
+            ['setMapper'],
+            ['mytable']
+        );
+
+        $mapper->expects($this->any())
+            ->method('__get')
+            ->will($this->returnValue($collection));
 
         $instance = new RespectRelational($mapper);
         $instance->setRepository('mytable');
 
-        $this->assertEquals(
-            'mytable',
+        $this->assertInstanceOf(
+            'Respect\Data\Collections\Collection',
             $instance->getRepository(),
-            'is not mytable'
+            'The instance returned by getRepository is not instance of Respect\Data\Collections\Collection'
         );
     }
 } 

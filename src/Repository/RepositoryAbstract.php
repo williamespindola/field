@@ -19,7 +19,9 @@ abstract class RepositoryAbstract
      */
     public function setStorage(StorageORMInterface $storage, $repository)
     {
-        $this->storage = $storage->setRepository($repository);
+        $storage->setRepository($repository);
+
+        $this->storage = $storage->getRepository();
 
         return $this;
     }

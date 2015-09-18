@@ -4,19 +4,27 @@ use WilliamEspindola\Field\Repository\FieldRepository;
 
 class FieldRepositoryTest extends PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        $this->storage = $this->getMock('\WilliamEspindola\Field\Storage\ORM\StorageORMInterface');
-
-        $this->storage->expects($this->any())
-            ->method('findAll')
-            ->will($this->returnValue([]));
-
-        $this->repository = new FieldRepository($this->storage);
-    }
-
     public function testFindAllShouldReturnAnArrayObject()
     {
-        $this->assertInstanceOf('ArrayObject', $this->repository->findAll());
+        $storageAbstract = $this->getMock('sdtClass', ['findAll']);
+
+        $storageAbstract->expects($this->any())
+                        ->method('findAll')
+                        ->will($this->returnValue((object)([])));
+
+        $storage = $this->getMock('\WilliamEspindola\Field\Storage\ORM\StorageORMInterface');
+
+        $storage->expects($this->any())
+                ->method('__get')
+                ->with($this->equalTo('storage'))
+                ->will($this->returnValue($storageAbstract));
+
+        $storage->expects($this->any())
+                ->method('getRepository')
+                ->will($this->returnValue($storageAbstract));
+
+        $repository = new FieldRepository($storage);
+
+        $this->assertInstanceOf('stdClass', $repository->findAll());
     }
 }
