@@ -2,8 +2,6 @@
 
 namespace WilliamEspindola\Field\Storage\ORM;
 
-use WilliamEspindola\Field\Entity\EntityInterface;
-
 /**
  * Interface StorageORMInterface
  *
@@ -77,4 +75,9 @@ interface StorageORMInterface
      * @return mixed
      */
     public function setRepository($repository);
+
+    /**
+     * @return mixed
+     */
+    public function getStorage();
 } 

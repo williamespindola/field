@@ -58,11 +58,14 @@ class Doctrine implements StorageORMInterface
         return $this->getMapper()->getRepository($this->repository);
     }
 
+    public function getStorage()
+    {
+        return $this;
+    }
+
     public function setRepository($repository)
     {
         $this->repository = $repository;
-
-        return $this;
     }
 
     /**

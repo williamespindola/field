@@ -2,6 +2,8 @@
 
 use WilliamEspindola\Field\Repository\RepositoryAbstract;
 
+use WilliamEspindola\Field\Storage\ORM\StorageORMInterface;
+
 class RepositoryAbstractTest extends PHPUnit_Framework_TestCase
 {
     public function testSetAndGetStorageWithValidDataShouldWork()
@@ -28,7 +30,6 @@ class RepositoryAbstractTest extends PHPUnit_Framework_TestCase
             $repository->getStorage()
         );
     }
-
     public function testFindAllShouldReturnAnArrayObject()
     {
         $storageAbstract = $this->getMock('sdtClass', ['findAll']);
@@ -56,5 +57,36 @@ class RepositoryAbstractTest extends PHPUnit_Framework_TestCase
     }
 }
 
-class MockRepository extends RepositoryAbstract {}
+class MockRepository extends RepositoryAbstract {
+    /**
+     * @var object StorageORMInterface
+     */
+    protected $storage;
 
+    public function __construct(StorageORMInterface $storage)
+    {
+        $this->setStorage($storage, 'WilliamEspindola\Field\Entity\Collection');
+    }
+
+    /**
+     * @param StorageORMInterface $storage
+     * @param string $repository
+     * @return RepositoryAbstract
+     */
+    public function setStorage(StorageORMInterface $storage, $repository)
+    {
+        $storage->setRepository($repository);
+
+        $this->storage = $storage->getStorage();
+
+        return $this;
+    }
+
+    /**
+     * @return StorageInterface
+     */
+    public function getStorage()
+    {
+        return $this->storage;
+    }
+}

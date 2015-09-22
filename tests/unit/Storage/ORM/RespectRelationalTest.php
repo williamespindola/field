@@ -2,10 +2,14 @@
 
 use WilliamEspindola\Field\Storage\ORM\RespectRelational;
 
+use Respect\Relational\Mapper;
+use Respect\Data\Collections\Collection;
+
 class RespectRelationalTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
+
         $this->mapper = $this->getMockBuilder('Respect\Relational\Mapper')
                             ->disableOriginalConstructor()
                             ->getMock();
@@ -61,30 +65,38 @@ class RespectRelationalTest extends \PHPUnit_Framework_TestCase
     public function testSetRepositoryWithAValidNamespaceShouldWork()
     {
         $instance   = new RespectRelational($this->mapper);
-        $stubClass  = $this->getMock('MyNamespace\MyClass');
 
         $instance->setRepository('MyNamespace\MyClass');
 
-        $this->assertEquals(
-            'myclass',
+        $this->assertInstanceOf(
+            'Respect\Data\Collections\Collection',
             PHPUnit_Framework_Assert::readAttribute($instance, 'repository'),
-            'The attribute repository is not instance of the string class name: myclass'
+            'The attribute repository is not instance of the string class name: Respect\Data\Collections\Collection'
         );
     }
 
-    /**
-     * @depends testSetRepositoryWithAValidNamespaceShouldWork
-     */
-    public function testSetRepositoryWithValidStringShouldWork()
+    public function testGetRepositoryShouldReturnMockedInstance()
     {
-        $instance   = new RespectRelational($this->mapper);
+        $conn = $this->getMock(
+            'PDO',
+            array('lastInsertId'),
+            array('sqlite::memory:')
+        );
+        $conn->exec('CREATE TABLE mytable(id INTEGER PRIMARY KEY)');
+        $conn->expects($this->any())
+            ->method('lastInsertId')
+            ->will($this->throwException(new \PDOException));
 
+
+        $mapper = new Mapper($conn);
+
+        $instance = new RespectRelational($mapper);
         $instance->setRepository('mytable');
 
-        $this->assertEquals(
-            'mytable',
-            PHPUnit_Framework_Assert::readAttribute($instance, 'repository'),
-            'The attribute repository is not instance of the string table name: mytable'
+        $this->assertInstanceOf(
+            'Respect\Data\Collections\Collection',
+            $instance->getRepository(),
+            'The attribute repository is not instance of the string class name: Respect\Data\Collections\Collection'
         );
     }
-} 
+}

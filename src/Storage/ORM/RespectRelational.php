@@ -5,6 +5,7 @@ namespace WilliamEspindola\Field\Storage\ORM;
 use Respect\Relational\Mapper;
 use Respect\Data\Styles;
 use \InvalidArgumentException as Argument;
+use Respect\Data\Collections\Collection;
 
 /**
  * Providers the Respect\Relational\Mapper ORM behavior
@@ -15,6 +16,9 @@ use \InvalidArgumentException as Argument;
  */
 class RespectRelational implements StorageORMInterface
 {
+    /**
+     *
+     */
     const INVALID_MAPPER_MESSAGE = 'Argument must be Respect\Relational\Mapper';
 
     /**
@@ -27,6 +31,9 @@ class RespectRelational implements StorageORMInterface
      */
     protected $repository;
 
+    /**
+     * @param Mapper $mapper
+     */
     public function __construct(Mapper $mapper)
     {
         $this->setMapper($mapper);
@@ -51,6 +58,10 @@ class RespectRelational implements StorageORMInterface
         return $this->mapper;
     }
 
+    /**
+     * @param $repository
+     * @throws \InvalidArgumentException
+     */
     public function setRepository($repository)
     {
         if (empty($repository))
@@ -61,14 +72,24 @@ class RespectRelational implements StorageORMInterface
             $repository = strtolower($reflect->getShortName());
         }
 
-        $this->repository = $repository;
+        $this->repository = new Collection($repository);
+        $this->repository->setMapper($this->mapper);
+    }
 
+    /**
+     * @return $this
+     */
+    public function getStorage()
+    {
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getRepository()
     {
-        return $this->getMapper()->{$this->repository};
+        return $this->repository;
     }
 
     /**
@@ -76,7 +97,9 @@ class RespectRelational implements StorageORMInterface
      */
     public function findAll()
     {
-        return $this->getRepository()->fetchAll();
+        $repository = $this->getRepository();
+
+        return $repository->fetchAll();
     }
 
     /**

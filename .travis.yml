@@ -17,6 +17,8 @@ matrix:
 before_script:
   - travis_retry composer self-update
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
+  - travis_retry composer require doctrine/orm
+  - travis_retry composer require respect/relational
 
 script:
   - phpunit --configuration phpunit.xml.dist --coverage-text --coverage-clover=coverage.clover

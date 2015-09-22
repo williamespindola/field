@@ -7,32 +7,9 @@ use WilliamEspindola\Field\Storage\ORM\StorageORMInterface;
 
 abstract class RepositoryAbstract
 {
-    /**
-     * @var object StorageORMInterface
-     */
-    protected $storage;
+    abstract public function setStorage(StorageORMInterface $storage, $repository);
 
-    /**
-     * @param StorageORMInterface $storage
-     * @param string $repository
-     * @return RepositoryAbstract
-     */
-    public function setStorage(StorageORMInterface $storage, $repository)
-    {
-        $storage->setRepository($repository);
-
-        $this->storage = $storage->getRepository();
-
-        return $this;
-    }
-
-    /**
-     * @return StorageInterface
-     */
-    public function getStorage()
-    {
-        return $this->storage;
-    }
+    abstract public function getStorage();
 
     /**
      * @return \ArrayObject
