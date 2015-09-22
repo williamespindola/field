@@ -59,6 +59,9 @@ class RespectRelationalTest extends \PHPUnit_Framework_TestCase
         $instance->setRepository('');
     }
 
+    /**
+     * @depends testSetRepositoryWithInvalidValueShouldThrowAndException
+     */
     public function testSetRepositoryWithAValidNamespaceShouldWork()
     {
         $instance   = new RespectRelational($this->mapper);
@@ -96,4 +99,4 @@ class RespectRelationalTest extends \PHPUnit_Framework_TestCase
             'The attribute repository is not instance of the string class name: Respect\Data\Collections\Collection'
         );
     }
-} 
+}
