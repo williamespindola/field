@@ -3,11 +3,13 @@
 use WilliamEspindola\Field\Storage\ORM\RespectRelational;
 
 use Respect\Relational\Mapper;
+use Respect\Data\Collections\Collection;
 
 class RespectRelationalTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
+
         $this->mapper = $this->getMockBuilder('Respect\Relational\Mapper')
                             ->disableOriginalConstructor()
                             ->getMock();
@@ -60,27 +62,13 @@ class RespectRelationalTest extends \PHPUnit_Framework_TestCase
     public function testSetRepositoryWithAValidNamespaceShouldWork()
     {
         $instance   = new RespectRelational($this->mapper);
-        $stubClass  = $this->getMock('MyNamespace\MyClass');
 
         $instance->setRepository('MyNamespace\MyClass');
 
-        $this->assertEquals(
-            'myclass',
+        $this->assertInstanceOf(
+            'Respect\Data\Collections\Collection',
             PHPUnit_Framework_Assert::readAttribute($instance, 'repository'),
-            'The attribute repository is not instance of the string class name: myclass'
-        );
-    }
-
-    public function testSetRepositoryWithValidStringShouldWork()
-    {
-        $instance   = new RespectRelational($this->mapper);
-
-        $instance->setRepository('mytable');
-
-        $this->assertEquals(
-            'mytable',
-            PHPUnit_Framework_Assert::readAttribute($instance, 'repository'),
-            'The attribute repository is not instance of the string table name: mytable'
+            'The attribute repository is not instance of the string class name: Respect\Data\Collections\Collection'
         );
     }
 
@@ -102,10 +90,10 @@ class RespectRelationalTest extends \PHPUnit_Framework_TestCase
         $instance = new RespectRelational($mapper);
         $instance->setRepository('mytable');
 
-        $this->assertEquals(
-            'mytable',
+        $this->assertInstanceOf(
+            'Respect\Data\Collections\Collection',
             $instance->getRepository(),
-            'is not mytable'
+            'The attribute repository is not instance of the string class name: Respect\Data\Collections\Collection'
         );
     }
 } 
