@@ -2,7 +2,6 @@
 
 namespace WilliamEspindola\Field\Repository;
 
-use WilliamEspindola\Field\Entity\EntityInterface;
 use WilliamEspindola\Field\Storage\ORM\StorageORMInterface;
 
 abstract class RepositoryAbstract
@@ -31,7 +30,7 @@ abstract class RepositoryAbstract
 
     /**
      * @param array $criteria
-     * @return EntityInterface
+     * @return object
      */
     public function find($id)
     {
@@ -39,7 +38,7 @@ abstract class RepositoryAbstract
     }
 
     /**
-     * @param EntityInterface|Object $data
+     * @param Object $data
      * @return boolean
      */
     public function save($data)
@@ -51,10 +50,10 @@ abstract class RepositoryAbstract
     }
 
     /**
-     * @param EntityInterface $entity
+     * @param Object $entity
      * @return boolean
      */
-    public function remove(EntityInterface $entity)
+    public function remove($entity)
     {
         $this->getStorage()->remove($entity);
         $this->getStorage()->flush();
