@@ -2,6 +2,10 @@
 
 namespace WilliamEspindola\Field\Entity;
 
+/**
+ * Class Options
+ * @package WilliamEspindola\Field\Entity
+ */
 class Options implements EntityInterface
 {
     /**
@@ -18,6 +22,12 @@ class Options implements EntityInterface
      * $var object WilliamEspindola\Field\Entity\Field
      */
     private $field;
+
+
+    /**
+     *  @var WilliamEspindola\Field\Entity\EntityInterface
+     */
+    private $language;
 
     /**
      * @param mixed $field
@@ -65,5 +75,21 @@ class Options implements EntityInterface
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * @param \WilliamEspindola\Field\Entity\EntityInterface $language
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
+    }
+
+    /**
+     * @return \WilliamEspindola\Field\Entity\EntityInterface
+     */
+    public function getLanguage()
+    {
+        return $this->language;
     }
 }

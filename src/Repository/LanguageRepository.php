@@ -4,7 +4,11 @@ namespace WilliamEspindola\Field\Repository;
 
 use WilliamEspindola\Field\Storage\ORM\StorageORMInterface;
 
-class CollectionFieldRepository
+/**
+ * Class LanguageRepository
+ * @package WilliamEspindola\Field\Repository
+ */
+class LanguageRepository
     extends RepositoryAbstract
     implements RepositoryInterface
 {
@@ -13,9 +17,12 @@ class CollectionFieldRepository
      */
     protected $storage;
 
+    /**
+     * @param StorageORMInterface $storage
+     */
     public function __construct(StorageORMInterface $storage)
     {
-        $this->setStorage($storage, 'WilliamEspindola\Field\Entity\CollectionField');
+        $this->setStorage($storage, 'WilliamEspindola\Field\Entity\Language');
     }
 
     /**

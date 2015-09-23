@@ -34,9 +34,9 @@ $extension          = new FieldTwigExtension($fieldRepository);
 
 echo $extension->getFieldValue('field-name');
 
-$stmt = $storage->getMapper()->getConnection()->prepare("DROP TABLE field;");
-$stmt->execute();
-$stmt->closeCursor();
+//$stmt = $storage->getMapper()->getConnection()->prepare("DROP TABLE field;");
+//$stmt->execute();
+//$stmt->closeCursor();
 ?>
 --EXPECT--
 field-name

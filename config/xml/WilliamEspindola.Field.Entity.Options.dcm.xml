@@ -11,6 +11,14 @@
 
         <field name="value" type="string" />
 
-        <many-to-one target-entity="WilliamEspindola\Field\Entity\Field" field="field" />
+        <one-to-many field="options" target-entity="WilliamEspindola\Field\Entity\Field" mapped-by="field">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+            <order-by>
+                <order-by-field name="text" direction="ASC" />
+            </order-by>
+        </one-to-many>
+        <one-to-one target-entity="WilliamEspindola\Field\Entity\Language" field="language" mapped-by="collection" />
     </entity>
 </doctrine-mapping>
