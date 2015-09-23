@@ -31,7 +31,7 @@ $extension          = new FieldTwigExtension($fieldRepository);
 
 echo gettype($extension->getField('field-name'));
 
-$db->query("DROP TABLE field;")->exec();
+//$db->query("DROP TABLE field;")->exec();
 ?>
 --EXPECT--
 object

@@ -2,7 +2,10 @@
 
 namespace WilliamEspindola\Field\Entity;
 
-
+/**
+ * Class Collection
+ * @package WilliamEspindola\Field\Entity
+ */
 class Collection implements EntityInterface
 {
     /**
@@ -19,6 +22,11 @@ class Collection implements EntityInterface
      * @var string The label of colllection
      */
     private $label;
+
+    /**
+     * @var EntityInterface Language
+     */
+    private $language;
 
     /**
      * @param mixed $id
@@ -66,5 +74,21 @@ class Collection implements EntityInterface
     public function getLabel()
     {
         return $this->label;
+    }
+
+    /**
+     * @param \WilliamEspindola\Field\Entity\EntityInterface $language
+     */
+    public function setLanguage(EntityInterface $language)
+    {
+        $this->language = $language;
+    }
+
+    /**
+     * @return \WilliamEspindola\Field\Entity\EntityInterface
+     */
+    public function getLanguage()
+    {
+        return $this->language;
     }
 }

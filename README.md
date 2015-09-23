@@ -7,28 +7,46 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Field is a blueprint to work as a CMS inpired on [cockpit](http://getcockpit.com/).
+Field is a blueprint to work as a CMS inspired on [cockpit](http://getcockpit.com/).
 Via command line you can create fields for your partials and consume in your project using Repository, Services or Extensions.
+
+## Features
+- Mult language database schema
+- Collection of fields
+- Options of fields
+- CLI interface
+- Services, Repositories and Storage
+- [Doctrine](https://github.com/doctrine/doctrine2) and [Relational](https://github.com/Respect/Relational) suport (cli only work with relational see issue #27)
 
 ### Example
 
-Create some field, running this in your terminal
+You can create Languages, Collections, Fields and Options. Here some examples:
 ```bash
-php vendor/bin/field create Collection about "About page"
-php vendor/bin/field create Field textfield "About text" text about
-php vendor/bin/field create Field imagefield "About image" text about
+php vendor/bin/field create Language en_EN English
+
+php vendor/bin/field create Collection header Header en_EN
+
+php vendor/bin/field create Field about "About text" en_EN html
+php vendor/bin/field create Field meta-keys Metakeys en_EN text header
+php vendor/bin/field create Field contact Contact en_EN text
+
+php vendor/bin/field create Option Girl contact en_EN
+php vendor/bin/field create Option Boy contact en_EN
+
 ```
 
-With this code you will create a collection called "About page" and two field for him "About text" and "About image". So you can get this using the Repository:
+Now you can use some repository or services to consume, or implement the storage as you need and white you own repository and services.
+Example!
 ```php
 use WilliamEspindola\Field\Storage\ORM\Doctrine;
-use WilliamEspindola\Field\Repository\CollectionFieldRepository;
+use WilliamEspindola\Field\Repository\FieldRepository;
 
 $doctrineStorage    = new Doctrine(/** doctrine setup */); // you can uss orther ORM as you want
-$repository         = new CollectionFieldRepository($doctrineStorage);
+$repository         = new FieldRepository($doctrineStorage);
 
 $repository->findAll()
 ```
+[Checkout the docs on wiki!](https://github.com/williamespindola/field/wiki)
 
 ## Install
 

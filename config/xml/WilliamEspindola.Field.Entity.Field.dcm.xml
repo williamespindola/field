@@ -13,5 +13,7 @@
         <field name="type" type="string" />
         <field name="value" type="text" />
         <field name="label" type="string" />
+
+        <one-to-one target-entity="WilliamEspindola\Field\Entity\Language" field="language" mapped-by="collection" />
     </entity>
 </doctrine-mapping>

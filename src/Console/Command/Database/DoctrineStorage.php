@@ -9,16 +9,18 @@ class DoctrineStorage
 {
     protected $mapper;
 
+    const XML_CONFIG_ORM = '/../../../../config/xml/';
+
     public function __construct($config)
     {
-        $setUp = Setup::createXMLMetadataConfiguration(array(__DIR__."/config/xml"), true);
+        $setUp = Setup::createXMLMetadataConfiguration([__DIR__ . self::XML_CONFIG_ORM], true);
 
         $this->mapper =  new Doctrine($config, $setUp);
     }
 
     public function getMapperInstance()
     {
-        return $this->mapper->getMapper();
+        return $this->mapper;
     }
 
     public function getExecuteQuery($query)
